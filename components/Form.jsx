@@ -1,38 +1,75 @@
-import React, { useState } from 'react'
-import styles from '../styles/Form.module.scss'
+import { KeyboardArrowRight } from '@mui/icons-material'
+import { Button, MenuItem, Select, TextField, Typography } from '@mui/material'
+import { Box } from '@mui/system'
+import React, { useEffect, useState } from 'react'
 import DisplayForm from './DisplayForm'
+import provinceTran from '../mock/province'
+import axios from 'axios'
+import DisplayHospital from './DisplayHospital'
+
 
 const Form = ({ props }) => {
-    const [province, setProvince] = useState([])
-    const [loading, setLoading] = useState(false)
+    const [province, setProvince] = useState('')
+    const [err, setaErr] = useState(false)
+    const [result, setResult] = useState([])
+    const [hospital, setHospital] = useState([])
+
     const covids = props
 
-    const handleSubmit = (e) => {
-        e.preventDefault()
+    const [pm25, setPm25] = useState(null)
 
-        if (province) {
-            setLoading(true)
+    const handleSubmit = () => {
+        setaErr(false)
+        if (province === '') {
+            setaErr(true)
+        }
+
+        else {
+            setResult(covids.filter(e => e.province === province))
+            axios
+                .get(`https://api.waqi.info/feed/${provinceTran[province]}/?token=d9d8b1d5d5d8e84d32dbbaedb51465b6293bdeb8`)
+                .then((response) => response.data)
+                .then((data) => {
+                    setPm25(data.data.iaqi.pm25.v)
+                })
+            axios.get('/api/getData').then(response => response.data).then((data) => {
+                setHospital(data)
+            })
+
         }
     }
-    console.log(covids)
 
-
-    const result = covids.filter(e => e.province == province)
-
-    console.log(result[0])
+    const handleChange = (event) => {
+        setProvince(event.target.value);
+    };
 
     return (
-        <div>
-            <form onSubmit={handleSubmit} className={styles.form}>
-                <label>
-                    Province:
-                    <input type="text" onChange={e => setProvince(e.target.value)} />
-                </label>
-                <input type="submit" value="Submit" />
-            </form>
-            {/* <DisplayForm props={result[0]}/> */}
-            {result[0] ? <>total case: {result[0].total_case} new case: {result[0].new_case}</>: <></>}
-        </div>
+        <Box sx={{ display: 'flex', margin: 10 }}>
+            <Box>
+                <Typography>Select Province </Typography>
+                <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={province[0]}
+                    label="province"
+                    onChange={handleChange}
+                    sx={{ width: 200 }}
+                >
+                    {Object.keys(provinceTran).map((key) => <MenuItem key={key} value={key}>{key}</MenuItem>)}
+                </Select>
+
+                <Button
+                    variant="contained"
+                    endIcon={<KeyboardArrowRight />}
+                    onClick={handleSubmit}
+                    sx={{marginLeft:2}}
+                >
+                    Submit
+                </Button>
+            </Box>
+            {pm25 && <DisplayForm pm={pm25} province={result[0]} />}
+            {hospital && <DisplayHospital hospital={hospital}/> }
+        </Box>
 
     )
 }

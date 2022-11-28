@@ -9,6 +9,7 @@ export default function Home() {
 
   const [covidProvinces, setCovidProvinces] = useState([])
   const [loading, setLoading] = useState(true)
+  
 
   useEffect(() => {
     setLoading(true)

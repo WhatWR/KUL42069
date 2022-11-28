@@ -9,12 +9,23 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@emotion/react": "^11.10.5",
+    "@emotion/styled": "^11.10.5",
+    "@mui/icons-material": "^5.10.15",
+    "@mui/material": "^5.10.15",
     "axios": "^1.2.0",
+    "bluebird": "^3.7.2",
     "eslint": "8.28.0",
     "eslint-config-next": "13.0.5",
+    "mongodb": "3.5.9",
+    "mongoose": "^6.7.3",
+    "mysql": "^2.18.1",
+    "mysql2": "^2.3.3",
     "next": "13.0.5",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "sass": "^1.56.1"
+    "sass": "^1.56.1",
+    "sequelize": "^6.25.8",
+    "serverless-mysql": "^1.5.4"
   }
 }
