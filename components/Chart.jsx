@@ -9,6 +9,7 @@ import {
     Legend,
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
+import { Box } from '@mui/system';
 
 
 ChartJS.register(
@@ -23,9 +24,10 @@ ChartJS.register(
 
 
 export function Chart({ people, covid }) {
-    const totalPeople = people.VALUE
-    const totalCase = covid.total_case
-    console.log((totalPeople), totalCase)
+
+    const totalPeople = parseFloat(people.VALUE)
+    const totalCase = parseFloat(covid.total_case)
+    console.log(totalPeople,totalCase)
     const options = {
         responsive: true,
         plugins: {
@@ -34,7 +36,7 @@ export function Chart({ people, covid }) {
             },
             title: {
                 display: true,
-                text: 'Chart ',
+                text: 'Case Chart ',
             },
         },
     };
@@ -45,16 +47,19 @@ export function Chart({ people, covid }) {
         labels,
         datasets: [
             {
-                label: 'Dataset 1',
-                data: totalPeople,
-                backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                label: '',
+                data: [totalPeople,totalCase],
+                backgroundColor: ['rgba(62, 191, 58, 0.5)','rgba(233, 9, 9, 0.5)'],
             },
-            {
-                label: 'Dataset 2',
-                data: totalCase,
-                backgroundColor: 'rgba(53, 162, 235, 0.5)',
-            },
+            // {
+            //     label: 'Total Case',
+            //     data: [totalCase],
+            //     backgroundColor: 'rgba(233, 9, 9, 0.5)',
+            // },
         ],
     };
-    return <>{people && covid && <Bar options={options} data={data} />}</>;
+    return <Box >{totalPeople && totalCase && <Bar options={options} data={data} />}</Box>;
+
+
+
 }

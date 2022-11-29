@@ -61,7 +61,7 @@ const Form = ({ props }) => {
     return (
         <Box sx={{ display: 'flex', margin: 10 }}>
             <Box>
-                <Box sx={{margin:2}}>
+                <Box sx={{ margin: 2 }}>
                     <Typography>Select Province </Typography>
                     <Select
                         labelId="demo-simple-select-label"
@@ -85,10 +85,11 @@ const Form = ({ props }) => {
                 </Box>
                 {pm25 && <DisplayForm pm={pm25} province={result[0]} />}
             </Box>
+            <Box>
+                {people[0] && <Chart people={people[0]} covid={result[0]} />}
+                {hospital && <DisplayHospital hospital={hospital} />}
+            </Box>
 
-
-            {hospital && <DisplayHospital hospital={hospital} />}
-            {/* {people && <Chart people={people[0]} covid={result[0]} />} */}
         </Box>
 
     )
