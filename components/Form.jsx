@@ -6,6 +6,7 @@ import DisplayForm from './DisplayForm'
 import provinceTran from '../mock/province'
 import axios from 'axios'
 import DisplayHospital from './DisplayHospital'
+import { Chart } from './Chart'
 
 
 const Form = ({ props }) => {
@@ -13,6 +14,7 @@ const Form = ({ props }) => {
     const [err, setaErr] = useState(false)
     const [result, setResult] = useState([])
     const [hospital, setHospital] = useState([])
+    const [people, setPeople] = useState([])
 
     const covids = props
 
@@ -35,40 +37,58 @@ const Form = ({ props }) => {
             axios.get('/api/getData').then(response => response.data).then((data) => {
                 setHospital(data)
             })
+            axios.get('/api/people').then(response => (response.data)).then((data) => {
+                setPeople(data)
+                console.log(data)
+            })
+            people.filter(e => e.PROVINCE === province)
 
         }
     }
+
 
     const handleChange = (event) => {
         setProvince(event.target.value);
     };
 
+    // const getPreple = () => {
+    //     const temp = people.filter(e => e.PROVINCE === province)
+    //     return temp[0]
+    // }
+
+    // console.log(getPreple(,)
+
     return (
         <Box sx={{ display: 'flex', margin: 10 }}>
             <Box>
-                <Typography>Select Province </Typography>
-                <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={province[0]}
-                    label="province"
-                    onChange={handleChange}
-                    sx={{ width: 200 }}
-                >
-                    {Object.keys(provinceTran).map((key) => <MenuItem key={key} value={key}>{key}</MenuItem>)}
-                </Select>
+                <Box sx={{margin:2}}>
+                    <Typography>Select Province </Typography>
+                    <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        value={province[0]}
+                        label="province"
+                        onChange={handleChange}
+                        sx={{ width: 200 }}
+                    >
+                        {Object.keys(provinceTran).map((key) => <MenuItem key={key} value={key}>{key}</MenuItem>)}
+                    </Select>
 
-                <Button
-                    variant="contained"
-                    endIcon={<KeyboardArrowRight />}
-                    onClick={handleSubmit}
-                    sx={{marginLeft:2}}
-                >
-                    Submit
-                </Button>
+                    <Button
+                        variant="contained"
+                        endIcon={<KeyboardArrowRight />}
+                        onClick={handleSubmit}
+                        sx={{ marginTop: 2 }}
+                    >
+                        Submit
+                    </Button>
+                </Box>
+                {pm25 && <DisplayForm pm={pm25} province={result[0]} />}
             </Box>
-            {pm25 && <DisplayForm pm={pm25} province={result[0]} />}
-            {hospital && <DisplayHospital hospital={hospital}/> }
+
+
+            {hospital && <DisplayHospital hospital={hospital} />}
+            {/* {people && <Chart people={people[0]} covid={result[0]} />} */}
         </Box>
 
     )
